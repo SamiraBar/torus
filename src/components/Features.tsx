@@ -5,23 +5,43 @@ import { SplitReveal, FadeUp } from "../lib/Reveal";
 const features = [
   {
     n: "01",
-    title: "Autonomous Agents",
-    body: "Fleets of task-specific agents that plan, delegate and verify each other's work across your stack.",
+    title: "Сайты и лендинги",
+    body: "Быстрые и красивые сайты и посадочные страницы, которые превращают трафик в заявки.",
   },
   {
     n: "02",
-    title: "Process Automation",
-    body: "End-to-end orchestration of operational workflows — from intake to resolution, without brittle rules.",
+    title: "Чат-боты и AI-ассистенты",
+    body: "Боты в Telegram, WhatsApp и на сайте: принимают заявки, отвечают клиентам и экономят время менеджеров.",
   },
   {
     n: "03",
-    title: "Enterprise Copilot",
-    body: "One interface over every internal system. Ask in language; receive actions, not links.",
+    title: "CRM для бизнеса",
+    body: "Настраиваем и разрабатываем CRM: клиенты, сделки и задачи в одном окне — ничего не теряется.",
   },
   {
     n: "04",
-    title: "Predictive Core",
-    body: "Forecasting woven into the transaction path, so decisions arrive before the moment they're needed.",
+    title: "Складской учёт",
+    body: "Точный учёт товаров, остатков и поставок — без Excel, пересорта и ручных сверок.",
+  },
+  {
+    n: "05",
+    title: "Маркетплейсы",
+    body: "Магазины и автоматизация продаж на Wildberries, Ozon и в вашем интернет-магазине.",
+  },
+  {
+    n: "06",
+    title: "Интеграции",
+    body: "Связываем 1С, платёжки, доставку и мессенджеры в единую систему, где данные ходят сами.",
+  },
+  {
+    n: "07",
+    title: "Автоматизация процессов",
+    body: "Автоворонки, уведомления и отчёты вместо ручной рутины и бесконечного копипаста.",
+  },
+  {
+    n: "08",
+    title: "Аналитика и дашборды",
+    body: "Сводим данные бизнеса в наглядные дашборды — решения на цифрах, а не на ощущениях.",
   },
 ];
 
@@ -77,9 +97,9 @@ export function Features() {
   return (
     <section id="features" className="relative px-6 py-40 md:px-12">
       <div className="mx-auto max-w-6xl">
-        <p className="eyebrow mb-6">Capabilities</p>
-        <SplitReveal as="h2" by="chars" className="display display-lg max-w-[14ch]">
-          Four instruments. One nervous system.
+        <p className="eyebrow mb-6">Услуги</p>
+        <SplitReveal as="h2" by="chars" className="display display-lg max-w-[16ch]">
+          Всё, что нужно бизнесу онлайн.
         </SplitReveal>
 
         <div className="mt-24 grid gap-6 md:grid-cols-2">
@@ -87,6 +107,14 @@ export function Features() {
             <Card key={f.n} {...f} delay={i * 0.1} />
           ))}
         </div>
+
+        <FadeUp delay={0.1}>
+          <p className="caption mt-14 !max-w-3xl">
+            А ещё — личные кабинеты, веб- и мобильные приложения, доработка и
+            перенос вашего текущего софта. Не нашли свою задачу?{" "}
+            <a href="#contacts" className="link-line text-mist">Напишите нам</a> — разберёмся.
+          </p>
+        </FadeUp>
       </div>
     </section>
   );

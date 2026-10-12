@@ -2,17 +2,15 @@ import { lazy, Suspense, useEffect } from "react";
 import { useSmoothScroll } from "./lib/useSmoothScroll";
 import { listenPointer } from "./lib/state";
 
-import { Cursor } from "./components/Cursor";
 import { Nav } from "./components/Nav";
-import { ProgressRail } from "./components/ProgressRail";
 import { Hero } from "./components/Hero";
 import { About } from "./components/About";
+import { Works } from "./components/Works";
 import { Features } from "./components/Features";
 import { Dashboard } from "./components/Dashboard";
 import { Stats } from "./components/Stats";
 import { Timeline } from "./components/Timeline";
 import { Solutions } from "./components/Solutions";
-import { CaseStudies } from "./components/CaseStudies";
 import { Testimonials } from "./components/Testimonials";
 import { Pricing } from "./components/Pricing";
 import { FAQ } from "./components/FAQ";
@@ -36,23 +34,20 @@ export default function App() {
       <div className="grid-lines" aria-hidden>
         <i /><i /><i /><i /><i /><i />
       </div>
-      <div className="grain" aria-hidden />
 
       {/* layer 2 — chrome */}
       <Nav />
-      <ProgressRail />
-      <Cursor />
 
       {/* layer 3 — the story */}
       <main className="relative z-10">
         <Hero />
         <About />
+        <Works />
         <Features />
         <Dashboard />
         <Stats />
         <Timeline />
         <Solutions />
-        <CaseStudies />
         <Testimonials />
         <Pricing />
         <FAQ />

@@ -1,76 +1,50 @@
-import { useLayoutEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitReveal, FadeUp } from "../lib/Reveal";
 
-gsap.registerPlugin(ScrollTrigger);
-
-const milestones = [
-  { year: "2019", title: "First principles", body: "Founded around a single question: what if software could carry responsibility, not just instructions?" },
-  { year: "2021", title: "The reasoning core", body: "Our first domain-tuned model enters production at a global logistics group. It has not slept since." },
-  { year: "2023", title: "Agents at scale", body: "Multi-agent orchestration ships. Fleets begin verifying each other's work across 40 enterprises." },
-  { year: "2025", title: "The silent layer", body: "Auralis becomes infrastructure — invisible, assumed, load-bearing. 320 companies run on the core." },
-  { year: "2026", title: "What's next", body: "Systems that don't just execute strategy, but quietly suggest better ones." },
+const steps = [
+  { n: "01", title: "Бриф", body: "Обсуждаем задачу, цели и бюджет. Консультация бесплатно." },
+  { n: "02", title: "Прототип", body: "Показываем структуру и дизайн до старта разработки." },
+  { n: "03", title: "Разработка", body: "Собираем спринтами и показываем прогресс каждую неделю." },
+  { n: "04", title: "Запуск", body: "Тестируем, разворачиваем у вас и обучаем команду." },
+  { n: "05", title: "Поддержка", body: "Дорабатываем и развиваем систему вместе с бизнесом." },
 ];
 
 export function Timeline() {
-  const root = useRef<HTMLElement>(null);
-
-  useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        "[data-spine]",
-        { scaleY: 0 },
-        {
-          scaleY: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: "[data-track]",
-            start: "top 70%",
-            end: "bottom 60%",
-            scrub: 0.4,
-          },
-        }
-      );
-    }, root);
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section ref={root} className="relative px-6 py-40 md:px-12">
-      <div className="mx-auto max-w-6xl">
-        <p className="eyebrow mb-6">Trajectory</p>
-        <SplitReveal as="h2" by="chars" className="display display-lg max-w-[12ch]">
-          Seven years of quiet momentum.
-        </SplitReveal>
-
-        <div data-track className="relative mt-28 pl-8 md:pl-0">
-          {/* spine */}
-          <div className="absolute left-0 top-0 h-full w-px bg-mist/10 md:left-1/2" />
-          <div data-spine className="absolute left-0 top-0 h-full w-px origin-top bg-accent/70 md:left-1/2" />
-
-          <div className="space-y-24">
-            {milestones.map((m, i) => (
-              <FadeUp key={m.year} y={56}>
-                <div
-                  className={`relative md:grid md:grid-cols-2 md:gap-20 ${
-                    i % 2 ? "md:text-left" : "md:text-right"
-                  }`}
-                >
-                  <div className={i % 2 ? "md:col-start-2" : ""}>
-                    <span className="display text-stroke block text-6xl font-semibold md:text-7xl">
-                      {m.year}
-                    </span>
-                    <h3 className="display mt-4 text-2xl font-medium">{m.title}</h3>
-                    <p className={`caption mt-3 ${i % 2 ? "" : "md:ml-auto"}`}>{m.body}</p>
-                  </div>
-                  {/* node */}
-                  <span className="absolute -left-8 top-3 h-2 w-2 -translate-x-1/2 rounded-full border border-accent/70 bg-ink md:left-1/2" />
-                </div>
-              </FadeUp>
-            ))}
+    <section className="relative px-6 py-32 md:px-12">
+      <div className="works-backdrop" aria-hidden />
+      <div className="relative mx-auto max-w-6xl">
+        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <p className="eyebrow mb-6">Как мы работаем</p>
+            <SplitReveal as="h2" by="words" stagger={0.05} className="display display-md">
+              Пять шагов
+              <br />
+              от заявки до&nbsp;результата
+            </SplitReveal>
           </div>
+          <FadeUp>
+            <p className="max-w-[30ch] text-[0.95rem] leading-[1.7] text-mist/70 md:text-right">
+              Вы всегда знаете, на каком этапе проект и что будет дальше.
+            </p>
+          </FadeUp>
         </div>
+
+        <FadeUp delay={0.1}>
+          <ol className="glass relative mt-16 grid lg:grid-cols-5">
+            {steps.map((s, i) => (
+              <li key={s.n} className={`relative p-7 ${i ? "border-t border-mist/10 lg:border-l lg:border-t-0" : ""}`}>
+                <div className="mb-6 flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-accent/50 text-[0.8rem] font-semibold text-accent">
+                    {s.n}
+                  </span>
+                  {i < steps.length - 1 && <span className="hidden h-px flex-1 bg-gradient-to-r from-accent/40 to-transparent lg:block" />}
+                </div>
+                <h3 className="display text-xl font-medium">{s.title}</h3>
+                <p className="mt-2 text-[0.9rem] leading-[1.6] text-mist/65">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+        </FadeUp>
       </div>
     </section>
   );

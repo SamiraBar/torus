@@ -6,10 +6,10 @@ import { SplitReveal, FadeUp } from "../lib/Reveal";
 gsap.registerPlugin(ScrollTrigger);
 
 const agents = [
-  { name: "ledger-reconcile", status: "acting", load: 82 },
-  { name: "demand-forecast", status: "reasoning", load: 64 },
-  { name: "vendor-negotiate", status: "observing", load: 41 },
-  { name: "anomaly-sentinel", status: "acting", load: 93 },
+  { name: "Заявка #1043", status: "в работе", load: 82 },
+  { name: "Заказ #А-207", status: "собирается", load: 64 },
+  { name: "Возврат #58", status: "ожидает", load: 41 },
+  { name: "Отгрузка #990", status: "готово", load: 93 },
 ];
 
 export function Dashboard() {
@@ -81,14 +81,14 @@ export function Dashboard() {
   return (
     <section id="dashboard" ref={root} className="relative px-6 py-40 md:px-12">
       <div className="mx-auto max-w-6xl">
-        <p className="eyebrow mb-6">Command surface</p>
-        <SplitReveal as="h2" by="chars" className="display display-lg max-w-[13ch]">
-          Watch it think.
+        <p className="eyebrow mb-6">Как это выглядит</p>
+        <SplitReveal as="h2" by="chars" className="display display-lg max-w-[16ch]">
+          Ваш бизнес — на одном экране.
         </SplitReveal>
         <FadeUp delay={0.2}>
           <p className="caption mt-6">
-            A live view into the reasoning layer — every agent, every decision,
-            every abstention, in real time.
+            Так может выглядеть ваша CRM или панель управления: заявки, заказы
+            и метрики со всех каналов — в реальном времени и в одном окне.
           </p>
         </FadeUp>
 
@@ -106,13 +106,13 @@ export function Dashboard() {
                 <span className="h-2 w-2 rounded-full bg-mist/25" />
                 <span className="h-2 w-2 rounded-full bg-accent/80" />
               </div>
-              <span className="text-[0.6rem] uppercase tracking-[0.3em] text-fog">auralis / operations / live</span>
+              <span className="text-[0.6rem] uppercase tracking-[0.3em] text-fog">torus crm / панель / онлайн</span>
             </div>
 
             <div className="mt-8 grid gap-10 md:grid-cols-5">
               {/* agents list */}
               <div className="md:col-span-3">
-                <p className="text-[0.6rem] uppercase tracking-[0.3em] text-fog">Active agents</p>
+                <p className="text-[0.6rem] uppercase tracking-[0.3em] text-fog">Заявки в работе</p>
                 <ul className="mt-5 space-y-5">
                   {agents.map((a) => (
                     <li key={a.name} className="group">
@@ -120,7 +120,7 @@ export function Dashboard() {
                         <span className="font-mono text-[0.8rem] text-mist/90">{a.name}</span>
                         <span
                           className={`text-[0.6rem] uppercase tracking-[0.25em] ${
-                            a.status === "acting" ? "text-accent" : "text-fog"
+                            a.status === "готово" ? "text-accent" : "text-fog"
                           }`}
                         >
                           {a.status}
@@ -140,8 +140,8 @@ export function Dashboard() {
 
               {/* throughput sparkline */}
               <div className="md:col-span-2">
-                <p className="text-[0.6rem] uppercase tracking-[0.3em] text-fog">Decisions / sec</p>
-                <div className="display mt-4 text-4xl font-medium">48,206</div>
+                <p className="text-[0.6rem] uppercase tracking-[0.3em] text-fog">Заявок за месяц</p>
+                <div className="display mt-4 text-4xl font-medium">2 480</div>
                 <svg viewBox="0 0 220 80" className="mt-6 w-full" fill="none">
                   <path
                     data-spark
@@ -161,7 +161,7 @@ export function Dashboard() {
                   </defs>
                 </svg>
                 <p className="caption mt-6 text-[0.72rem]">
-                  Confidence-weighted throughput across all deployed reasoning cores.
+                  Заявки со всех каналов — сайт, боты и маркетплейсы — в одном потоке.
                 </p>
               </div>
             </div>

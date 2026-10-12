@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// No invented client reviews — the studio is new. Short honest notes from the team instead.
 const quotes = [
   {
-    text: "It's the first system we've deployed that we describe in the language of colleagues, not tools.",
-    name: "Elena Vasquez",
-    role: "COO, Meridian Freight",
+    text: "Мы молодая команда. Свежий взгляд, современные технологии и желание сделать лучше, чем просили.",
+    name: "Свежий взгляд",
+    role: "Команда Torus",
   },
   {
-    text: "Auralis didn't automate our process. It made the process unnecessary.",
-    name: "Tomas Lindqvist",
-    role: "CIO, Halcyon Health",
+    text: "Фантазия работает на ваш бизнес: предложим идеи, о которых вы не думали, но точно будете рады.",
+    name: "Идеи сверх ТЗ",
+    role: "Команда Torus",
   },
   {
-    text: "The remarkable thing is what you stop noticing. Decisions simply arrive, already made well.",
-    name: "Priya Raman",
-    role: "VP Operations, Northwind Retail",
+    text: "Никаких посредников: вы общаетесь напрямую с теми, кто рисует дизайн и пишет код.",
+    name: "Напрямую с командой",
+    role: "Команда Torus",
   },
 ];
 
@@ -32,9 +33,10 @@ export function Testimonials() {
   const q = quotes[i];
 
   return (
-    <section className="relative flex min-h-[80vh] items-center px-6 py-40 md:px-12">
-      <div className="mx-auto w-full max-w-5xl text-center">
-        <p className="eyebrow mb-14">What they say</p>
+    <section className="relative flex min-h-[70vh] items-center px-6 py-32 md:px-12">
+      <div className="works-backdrop" aria-hidden />
+      <div className="relative mx-auto w-full max-w-5xl text-center">
+        <p className="eyebrow mb-14">Про нас честно</p>
 
         <div className="relative min-h-[16rem] md:min-h-[14rem]">
           <AnimatePresence mode="wait">
@@ -46,10 +48,10 @@ export function Testimonials() {
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             >
               <blockquote className="display display-md mx-auto max-w-[24ch] !leading-[1.2]">
-                “{q.text}”
+                {q.text}
               </blockquote>
               <figcaption className="mt-10">
-                <div className="text-sm font-medium">{q.name}</div>
+                <div className="text-sm font-medium text-accent">{q.name}</div>
                 <div className="caption mx-auto mt-1">{q.role}</div>
               </figcaption>
             </motion.figure>
@@ -62,7 +64,7 @@ export function Testimonials() {
             <button
               key={idx}
               onClick={() => setI(idx)}
-              aria-label={`Quote ${idx + 1}`}
+              aria-label={`Пункт ${idx + 1}`}
               className="relative h-6 w-10"
               data-cursor
             >

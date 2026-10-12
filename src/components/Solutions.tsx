@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { SplitReveal } from "../lib/Reveal";
 
 const rows = [
-  { title: "Finance", body: "Reconciliation, risk and reporting that close themselves. Auditable to the token." },
-  { title: "Healthcare", body: "Clinical operations orchestrated end-to-end, with a human hand on every irreversible act." },
-  { title: "Manufacturing", body: "Lines that predict their own failures and negotiate their own maintenance windows." },
-  { title: "Retail", body: "Demand sensed at the shelf, priced at the edge, replenished before the gap appears." },
-  { title: "Logistics", body: "Every container, lane and customs form reasoned about, continuously, in one model." },
+  { title: "Ритейл и e-commerce", body: "Интернет-магазины, маркетплейсы, складской учёт и автоматизация заказов со всех площадок." },
+  { title: "Услуги и сервис", body: "Онлайн-запись, оплаты, напоминания и CRM для салонов, клиник и сервисных компаний." },
+  { title: "Опт и логистика", body: "Учёт товаров, заявки, документы и интеграция с 1С и службами доставки." },
+  { title: "Производство", body: "Заявки, склад, планирование и контроль на всех этапах — в одной системе." },
+  { title: "Онлайн-школы", body: "Сайты, лендинги, чат-боты и личные кабинеты учеников с оплатами и доступами." },
+  { title: "Кафе и рестораны", body: "Сайты, доставка, боты приёма заказов и учёт для HoReCa." },
 ];
 
 /** Awwwards-style index rows: oversized outlined titles that fill on hover
@@ -18,9 +19,9 @@ export function Solutions() {
   return (
     <section id="solutions" className="relative px-6 py-40 md:px-12">
       <div className="mx-auto max-w-6xl">
-        <p className="eyebrow mb-6">Solutions</p>
-        <SplitReveal as="h2" by="chars" className="display display-lg max-w-[14ch]">
-          Made for gravity-bound industries.
+        <p className="eyebrow mb-6">Кому мы помогаем</p>
+        <SplitReveal as="h2" by="chars" className="display display-lg max-w-[16ch]">
+          Работаем с бизнесом любого размера.
         </SplitReveal>
 
         <div className="mt-24">

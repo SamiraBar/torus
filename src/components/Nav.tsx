@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
+import { TELEGRAM_URL } from "../lib/contacts";
 import { motion } from "framer-motion";
 import { Magnetic } from "../lib/Magnetic";
 
 const links = [
-  { label: "Platform", href: "#about" },
-  { label: "Solutions", href: "#solutions" },
-  { label: "Cases", href: "#cases" },
-  { label: "Pricing", href: "#pricing" },
+  { label: "Работы", href: "#works" },
+  { label: "Услуги", href: "#features" },
+  { label: "Направления", href: "#solutions" },
+  { label: "Цены", href: "#pricing" },
 ];
 
 export function Nav() {
@@ -31,7 +32,7 @@ export function Nav() {
         }`}
       >
         <a href="#top" className="display text-[1.05rem] tracking-[0.28em] font-semibold">
-          AURALIS
+          TORUS
         </a>
 
         <nav className="hidden items-center gap-10 md:flex">
@@ -48,10 +49,12 @@ export function Nav() {
 
         <Magnetic strength={0.3}>
           <a
-            href="#pricing"
+            href={TELEGRAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="glass block rounded-full px-6 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.25em] transition-colors duration-300 hover:text-accent"
           >
-            Request access
+            Обсудить проект
           </a>
         </Magnetic>
       </div>

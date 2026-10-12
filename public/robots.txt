@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+# демо-доступы для клиентов не индексируем
+Disallow: /crm
+Disallow: /school
+Disallow: /otel

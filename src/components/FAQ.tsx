@@ -1,27 +1,40 @@
 import { useState } from "react";
+import { TELEGRAM_URL } from "../lib/contacts";
 import { motion, AnimatePresence } from "framer-motion";
-import { SplitReveal } from "../lib/Reveal";
+import { SplitReveal, FadeUp } from "../lib/Reveal";
 
 const faqs = [
   {
-    q: "Where does our data live?",
-    a: "Inside your perimeter. Cores deploy into your cloud or on-prem hardware; weights and data never transit our infrastructure. The Sovereign tier is fully air-gapped.",
+    q: "Сколько стоит разработка?",
+    a: "Ориентиры: сайт или чат-бот — от 30 000 сом, CRM и автоматизация — от 120 000 сом. Точную цену называем после бесплатного обсуждения, когда понятен объём, и фиксируем в договоре.",
   },
   {
-    q: "How do you keep autonomous systems safe?",
-    a: "Every deployment carries a safety envelope: irreversible actions require human counter-signature, agents verify each other's work, and every decision is auditable to the token — replayable, inspectable, attributable.",
+    q: "Можно сначала попробовать?",
+    a: "Да. Делаем тестовый запуск: первую рабочую версию на ваших данных. Вы проверяете её в деле, и только потом двигаемся дальше.",
   },
   {
-    q: "How long does deployment take?",
-    a: "First agent in production in three weeks. Full operational coverage typically lands between the second and fourth month, depending on the number of systems we integrate.",
+    q: "Сколько времени займёт?",
+    a: "Сайт или бот — 1–2 недели. CRM, магазин или автоматизация — от 3 до 6 недель. Сроки по этапам прописываем в договоре.",
   },
   {
-    q: "Does this replace our team?",
-    a: "It replaces their busywork. Our longest-running customers redeployed their operations teams toward exceptions, strategy and oversight — the work that actually needed them all along.",
+    q: "Как проходит оплата?",
+    a: "По этапам: предоплата за этап и остаток после приёмки. Перевод на карту или безналичный расчёт для компаний.",
   },
   {
-    q: "What happens if the model is uncertain?",
-    a: "It abstains, and says so. Abstention is a first-class outcome in the reasoning core — uncertainty is routed to humans with full context rather than papered over with a confident guess.",
+    q: "Кому принадлежит готовый проект?",
+    a: "Вам. После оплаты передаём исходный код, все доступы и инструкцию по работе с системой.",
+  },
+  {
+    q: "Что будет после запуска?",
+    a: "Остаёмся на связи: исправляем, дорабатываем и развиваем систему — по абонементу или разово, как вам удобнее.",
+  },
+  {
+    q: "У нас уже есть сайт или CRM. Поможете?",
+    a: "Да. Разберём, что есть, доработаем или подключим нужные интеграции. Переделать с нуля предложим, только если так выйдет дешевле.",
+  },
+  {
+    q: "Работаете удалённо?",
+    a: "Да: созвоны, показ результатов и сдача работ проходят онлайн. Если нужно, встречаемся лично.",
   },
 ];
 
@@ -29,48 +42,67 @@ export function FAQ() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section id="faq" className="relative px-6 py-40 md:px-12">
-      <div className="mx-auto grid max-w-6xl gap-16 lg:grid-cols-12">
-        <div className="lg:col-span-5">
-          <p className="eyebrow mb-6">Questions</p>
-          <SplitReveal as="h2" by="chars" className="display display-lg max-w-[9ch]">
-            Asked, answered.
-          </SplitReveal>
+    <section id="faq" className="relative px-6 py-32 md:px-12">
+      <div className="works-backdrop" aria-hidden />
+      <div className="relative mx-auto grid max-w-6xl gap-12 lg:grid-cols-12">
+        <div className="lg:col-span-4">
+          <div className="lg:sticky lg:top-28">
+            <p className="eyebrow mb-6">Вопросы</p>
+            <SplitReveal as="h2" by="words" stagger={0.05} className="display display-md">
+              Частые
+              <br />
+              вопросы
+            </SplitReveal>
+            <FadeUp>
+              <p className="mt-6 max-w-[30ch] text-[0.95rem] leading-[1.7] text-mist/70">
+                Не нашли ответ? Напишите нам — ответим в течение дня.
+              </p>
+              <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" data-cursor className="link-line mt-6 inline-block text-[0.7rem] uppercase tracking-[0.3em] text-accent">
+                Задать вопрос
+              </a>
+            </FadeUp>
+          </div>
         </div>
 
-        <div className="lg:col-span-7">
-          {faqs.map((f, i) => (
-            <div key={f.q} className="border-t border-mist/10 last:border-b">
-              <button
-                data-cursor
-                onClick={() => setOpen(open === i ? null : i)}
-                className="flex w-full items-center justify-between gap-6 py-7 text-left"
-              >
-                <span className="display text-lg font-medium md:text-xl">{f.q}</span>
-                <motion.span
-                  animate={{ rotate: open === i ? 45 : 0 }}
-                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                  className="relative block h-4 w-4 shrink-0"
+        <div className="flex flex-col gap-3 lg:col-span-8">
+          {faqs.map((f, i) => {
+            const isOpen = open === i;
+            return (
+              <div key={f.q} className={`glass overflow-hidden transition-colors duration-300 ${isOpen ? "outline outline-1 outline-accent/30" : ""}`}>
+                <button
+                  data-cursor
+                  onClick={() => setOpen(isOpen ? null : i)}
+                  className="flex w-full items-center justify-between gap-6 px-7 py-6 text-left"
                 >
-                  <span className="absolute left-0 top-1/2 h-px w-full bg-mist/60" />
-                  <span className="absolute left-1/2 top-0 h-full w-px bg-mist/60" />
-                </motion.span>
-              </button>
-              <AnimatePresence initial={false}>
-                {open === i && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="overflow-hidden"
+                  <span className="flex items-center gap-5">
+                    <span className={`text-[0.75rem] font-semibold tabular-nums ${isOpen ? "text-accent" : "text-fog"}`}>{String(i + 1).padStart(2, "0")}</span>
+                    <span className="text-[1.08rem] font-medium md:text-[1.15rem]">{f.q}</span>
+                  </span>
+                  <motion.span
+                    animate={{ rotate: isOpen ? 45 : 0 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                    className={`relative block h-4 w-4 shrink-0 ${isOpen ? "text-accent" : "text-mist/60"}`}
                   >
-                    <p className="caption max-w-xl pb-8 !text-[0.85rem]">{f.a}</p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          ))}
+                    <span className="absolute left-0 top-1/2 h-px w-full bg-current" />
+                    <span className="absolute left-1/2 top-0 h-full w-px bg-current" />
+                  </motion.span>
+                </button>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <p className="max-w-[60ch] px-7 pb-7 pl-[3.6rem] text-[0.98rem] leading-[1.75] text-mist/80">{f.a}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

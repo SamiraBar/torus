@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Clash Display", "Inter", sans-serif;
+  --font-display: "Manrope", "Inter", sans-serif;
   --font-body: "Inter", sans-serif;
 
   --color-ink: #08090b;
@@ -37,16 +37,6 @@ body {
   overflow-x: clip;
 }
 
-@media (pointer: fine) {
-  body {
-    cursor: none;
-  }
-  body a,
-  body button {
-    cursor: none;
-  }
-}
-
 ::selection {
   background: rgba(143, 168, 255, 0.25);
   color: var(--color-mist);
@@ -61,7 +51,7 @@ main {
 
 .display {
   font-family: var(--font-display);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: -0.03em;
   line-height: 0.94;
 }
@@ -140,74 +130,6 @@ main {
   border-left: none;
 }
 
-/* ---------- film grain ---------- */
-
-.grain {
-  position: fixed;
-  inset: -100%;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain 8s steps(10) infinite;
-}
-
-@keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-5%, -10%); }
-  20% { transform: translate(-15%, 5%); }
-  30% { transform: translate(7%, -25%); }
-  40% { transform: translate(-5%, 25%); }
-  50% { transform: translate(-15%, 10%); }
-  60% { transform: translate(15%, 0%); }
-  70% { transform: translate(0%, 15%); }
-  80% { transform: translate(3%, 35%); }
-  90% { transform: translate(-10%, 10%); }
-}
-
-/* ---------- cursor ---------- */
-
-.cursor-dot,
-.cursor-ring {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 100;
-  pointer-events: none;
-  border-radius: 9999px;
-  will-change: transform;
-}
-
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  background: var(--color-mist);
-}
-
-.cursor-ring {
-  width: 36px;
-  height: 36px;
-  border: 1px solid rgba(242, 241, 238, 0.35);
-  transition: width 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    height 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-    border-color 0.35s ease,
-    background-color 0.35s ease;
-}
-
-.cursor-ring.is-active {
-  width: 64px;
-  height: 64px;
-  border-color: rgba(143, 168, 255, 0.55);
-  background: rgba(143, 168, 255, 0.06);
-}
-
-@media (pointer: coarse) {
-  .cursor-dot,
-  .cursor-ring {
-    display: none;
-  }
-}
-
 /* ---------- misc ---------- */
 
 .text-stroke {
@@ -237,8 +159,63 @@ main {
   transform-origin: left;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .grain {
-    animation: none;
-  }
+/* ---------- works: browser frame ---------- */
+
+.browser-frame {
+  border-radius: 1.1rem;
+  overflow: hidden;
+  border: 1px solid rgba(242, 241, 238, 0.1);
+  background: #0d0e11;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.4),
+    0 40px 120px -30px rgba(0, 0, 0, 0.85),
+    0 0 80px -20px rgba(143, 168, 255, 0.12);
+  text-shadow: none;
+}
+
+.browser-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  height: 2.6rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid rgba(242, 241, 238, 0.07);
+  background: linear-gradient(180deg, rgba(242, 241, 238, 0.05), rgba(242, 241, 238, 0.015));
+}
+
+.browser-url {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 1rem;
+  border-radius: 999px;
+  background: rgba(242, 241, 238, 0.05);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--color-fog);
+}
+
+.live-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #28c840;
+  box-shadow: 0 0 0 0 rgba(40, 200, 64, 0.6);
+  animation: live-pulse 2s infinite;
+}
+
+@keyframes live-pulse {
+  70% { box-shadow: 0 0 0 7px rgba(40, 200, 64, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(40, 200, 64, 0); }
+}
+
+/* solid ground for the works section: the 3D scene must never run behind copy */
+.works-backdrop {
+  position: absolute;
+  inset: 0;
+  background: var(--color-ink);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0, #000 160px, #000 calc(100% - 160px), transparent 100%);
+  pointer-events: none;
 }
