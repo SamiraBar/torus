@@ -3,26 +3,42 @@
  *   POST — событие с сайта (просмотр, клик в Telegram, заявка, вход в демо)
  *   GET  — статистика для /admin, доступ по паролю ADMIN_PASSWORD (заголовок x-admin-password)
  *
- * Хранилище — Upstash Redis через REST. Переменные появляются сами при подключении
- * Upstash в Vercel (Storage → Upstash for Redis): KV_REST_API_URL, KV_REST_API_TOKEN.
+ * Хранилище — Redis из Vercel Storage. Переменная со строкой подключения появляется сама
+ * при подключении базы к проекту: STORAGE_URL или REDIS_URL (Redis Cloud),
+ * либо KV_REST_API_URL + KV_REST_API_TOKEN (Upstash, через REST).
  * Счётчики по дням живут 90 дней.
  */
+import { createClient } from "redis";
 
 type Cmd = (string | number)[];
 
-function redisConfigured() {
-  return Boolean(
-    (process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL) &&
-      (process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN)
-  );
+const env = process.env;
+const REDIS_URL = env.STORAGE_URL || env.REDIS_URL;
+const REST_URL = env.KV_REST_API_URL || env.UPSTASH_REDIS_REST_URL;
+const REST_TOKEN = env.KV_REST_API_TOKEN || env.UPSTASH_REDIS_REST_TOKEN;
+
+const redisConfigured = () => Boolean(REDIS_URL || (REST_URL && REST_TOKEN));
+
+// соединение переиспользуется между вызовами, пока функция «тёплая»
+let client: Promise<ReturnType<typeof createClient>> | null = null;
+function connect() {
+  if (!client) {
+    const c = createClient({ url: REDIS_URL });
+    c.on("error", () => { client = null; });
+    client = c.connect().then(() => c).catch((e) => { client = null; throw e; });
+  }
+  return client;
 }
 
 async function pipeline(cmds: Cmd[]): Promise<unknown[]> {
-  const url = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
-  const res = await fetch(`${url}/pipeline`, {
+  if (REDIS_URL) {
+    const c = await connect();
+    // команды одного тика node-redis сам отправляет пачкой
+    return Promise.all(cmds.map((cmd) => c.sendCommand(cmd.map(String))));
+  }
+  const res = await fetch(`${REST_URL}/pipeline`, {
     method: "POST",
-    headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
+    headers: { Authorization: `Bearer ${REST_TOKEN}`, "Content-Type": "application/json" },
     body: JSON.stringify(cmds),
   });
   if (!res.ok) throw new Error(`redis ${res.status}`);
@@ -116,7 +132,7 @@ export async function GET(request: Request) {
   const password = process.env.ADMIN_PASSWORD;
   if (!password) return json(500, { error: "Не задан ADMIN_PASSWORD в Vercel" });
   if (!safeEqual(request.headers.get("x-admin-password") ?? "", password)) return json(401, { error: "Неверный пароль" });
-  if (!redisConfigured()) return json(500, { error: "Не подключён Upstash Redis в Vercel (Storage)" });
+  if (!redisConfigured()) return json(500, { error: "Не подключена база Redis в Vercel (Storage)" });
 
   const days = Array.from({ length: DAYS }, (_, i) => day(DAYS - 1 - i));
   const parts = ["events", "paths", "refs", "countries", "devices"] as const;
