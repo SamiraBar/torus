@@ -2,7 +2,10 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { SchoolApp } from "./SchoolApp";
 import { DemoGate } from "../crm/DemoGate";
+import { trackPage } from "../lib/track";
 import "../crm/crm.css";
+
+trackPage();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

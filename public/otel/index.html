@@ -10,5 +10,17 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      /* аналитика Torus: просмотр демо, смотреть на /admin */
+      (function () {
+        try {
+          if (localStorage.getItem("torus-admin") || location.hostname === "localhost") return;
+          var vid = localStorage.getItem("torus-vid");
+          if (!vid) { vid = Math.random().toString(36).slice(2) + Date.now().toString(36); localStorage.setItem("torus-vid", vid); }
+          var ref = ""; try { var h = document.referrer ? new URL(document.referrer).hostname : ""; if (h && h !== location.hostname) ref = h; } catch (e) {}
+          navigator.sendBeacon("/api/analytics", new Blob([JSON.stringify({ event: "view", path: "/otel", ref: ref, vid: vid })], { type: "application/json" }));
+        } catch (e) {}
+      })();
+    </script>
   </body>
 </html>

@@ -1,6 +1,7 @@
 import { useState, type FormEvent, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import { C } from "./ui";
+import { track } from "../lib/track";
 
 /* Password screen for demo links sent to clients. Only the SHA-256 of the
    password lives in the code; the password itself goes out with the link. */
@@ -42,6 +43,7 @@ export function DemoGate({ title, logo, hash, storageKey, children }: Props) {
     setBusy(true);
     if ((await sha256(pwd)) === hash) {
       localStorage.setItem(storageKey, hash);
+      track("demo", storageKey.replace("torus-", "").replace("-demo", ""));
       setOk(true);
     } else {
       setError(true);

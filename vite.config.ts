@@ -10,7 +10,7 @@ const otelDemo = (): Plugin => ({
     server.middlewares.use((req: { url?: string }, _res, next) => {
       const [path, query] = (req.url ?? "").split("?");
       if (path === "/otel" || path === "/otel/") req.url = "/otel/index.html" + (query ? `?${query}` : "");
-      if (path === "/crm" || path === "/school") req.url = `${path}/` + (query ? `?${query}` : "");
+      if (path === "/crm" || path === "/school" || path === "/admin") req.url = `${path}/` + (query ? `?${query}` : "");
       next();
     });
   },
@@ -24,7 +24,7 @@ export default defineConfig({
     chunkSizeWarningLimit: 1200,
     rollupOptions: {
       // /crm и /school — отдельные страницы с демо CRM (вход по паролю)
-      input: { main: "index.html", crm: "crm/index.html", school: "school/index.html" },
+      input: { main: "index.html", crm: "crm/index.html", school: "school/index.html", admin: "admin/index.html" },
       output: {
         manualChunks: {
           three: ["three", "@react-three/fiber", "@react-three/drei"],

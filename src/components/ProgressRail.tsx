@@ -4,9 +4,8 @@ const sections = [
   { id: "top", label: "01" },
   { id: "about", label: "02" },
   { id: "features", label: "03" },
-  { id: "dashboard", label: "04" },
-  { id: "solutions", label: "05" },
-  { id: "pricing", label: "06" },
+  { id: "solutions", label: "04" },
+  { id: "pricing", label: "05" },
 ];
 
 /** The reference's left-hand progress rail — tiny ticks, one lit accent. */

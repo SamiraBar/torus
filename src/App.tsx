@@ -7,7 +7,6 @@ import { Hero } from "./components/Hero";
 import { About } from "./components/About";
 import { Works } from "./components/Works";
 import { Features } from "./components/Features";
-import { Dashboard } from "./components/Dashboard";
 import { Stats } from "./components/Stats";
 import { Timeline } from "./components/Timeline";
 import { Solutions } from "./components/Solutions";
@@ -44,7 +43,6 @@ export default function App() {
         <About />
         <Works />
         <Features />
-        <Dashboard />
         <Stats />
         <Timeline />
         <Solutions />

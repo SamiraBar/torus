@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SplitReveal } from "../lib/Reveal";
 import { Magnetic } from "../lib/Magnetic";
 import { TELEGRAM_URL, TELEGRAM_USERNAME } from "../lib/contacts";
+import { track } from "../lib/track";
 
 const TELEGRAM = TELEGRAM_URL;
 
@@ -23,6 +24,7 @@ function ContactForm() {
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error(String(res.status));
+      track("lead");
       form.reset();
       setStatus("sent");
     } catch {
