@@ -2,7 +2,7 @@ import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
-// public/otel — готовая демо-сборка отельной системы. В dev Vite отдал бы на /otel
+// public/otel и public/buh — готовые демо-сборки (отель, бухгалтерия). В dev Vite отдал бы на /otel
 // главную страницу (SPA fallback), поэтому направляем запрос на её index.html.
 const otelDemo = (): Plugin => ({
   name: "otel-demo",
@@ -10,6 +10,7 @@ const otelDemo = (): Plugin => ({
     server.middlewares.use((req: { url?: string }, _res, next) => {
       const [path, query] = (req.url ?? "").split("?");
       if (path === "/otel" || path === "/otel/") req.url = "/otel/index.html" + (query ? `?${query}` : "");
+      if (path === "/buh" || path === "/buh/") req.url = "/buh/index.html" + (query ? `?${query}` : "");
       if (path === "/crm" || path === "/school" || path === "/admin") req.url = `${path}/` + (query ? `?${query}` : "");
       next();
     });
