@@ -48,8 +48,8 @@ type WorkProps = {
 
 function WorkCard({ num, tag, title, lead, url, preview, hoverLabel, onOpen, children }: WorkProps) {
   return (
-    <article className="work-card grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-14">
-      <div className="order-2 md:order-1">
+    <article className="work-card flex flex-col gap-8 md:flex-row md:items-center md:justify-center md:gap-10">
+      <div className="order-2 md:order-1 md:w-[28%] md:max-w-[22rem] md:shrink-0">
         <div className="flex items-center gap-4">
           <span className="display shrink-0 whitespace-nowrap text-sm text-fog">{num}</span>
           <span className="eyebrow !tracking-[0.3em]">{tag}</span>
@@ -66,8 +66,8 @@ function WorkCard({ num, tag, title, lead, url, preview, hoverLabel, onOpen, chi
         data-cursor
         onClick={onOpen}
         onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onOpen()}
-        className="group relative order-1 block w-full cursor-pointer md:order-2 md:ml-auto"
-        style={{ maxWidth: "calc((100vh - 15rem) * 16 / 9)" }}
+        className="group relative order-1 block w-full min-w-0 cursor-pointer md:order-2 md:flex-1"
+        style={{ maxWidth: "calc((100vh - 11rem) * 16 / 9)" }}
       >
         <BrowserFrame url={url} live>
           <div className="transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.015]">
@@ -214,7 +214,7 @@ function WorksCarousel({ onOpen }: { onOpen: (id: WorkId) => void }) {
   const touchX = useRef<number | null>(null);
 
   return (
-    <div className="relative md:px-20">
+    <div className="relative md:px-16">
       <div className="absolute inset-y-0 left-0 z-10 hidden items-center md:flex">
         <ArrowButton dir="prev" onClick={() => go(-1)} />
       </div>
