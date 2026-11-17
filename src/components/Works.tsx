@@ -48,15 +48,26 @@ type WorkProps = {
 
 function WorkCard({ num, tag, title, lead, url, preview, hoverLabel, onOpen, children }: WorkProps) {
   return (
-    // width follows viewport height: frame (16:9) + caption must fit on one screen
-    <article className="work-card mx-auto" style={{ maxWidth: "min(100%, calc((100vh - 13rem) * 16 / 9))" }}>
+    <article className="work-card grid items-center gap-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-14">
+      <div className="order-2 md:order-1">
+        <div className="flex items-center gap-4">
+          <span className="display shrink-0 whitespace-nowrap text-sm text-fog">{num}</span>
+          <span className="eyebrow !tracking-[0.3em]">{tag}</span>
+        </div>
+        <h3 className="display mt-4 text-2xl font-medium lg:text-[1.9rem] lg:leading-tight">{title}</h3>
+        <p className="mt-5 !max-w-none text-[0.88rem] leading-[1.7] text-mist/70">{lead}</p>
+        {children}
+      </div>
+
+      {/* frame width follows viewport height so the whole slide fits on one screen */}
       <div
         role="button"
         tabIndex={0}
         data-cursor
         onClick={onOpen}
         onKeyDown={(e) => (e.key === "Enter" || e.key === " ") && onOpen()}
-        className="group relative block cursor-pointer"
+        className="group relative order-1 block w-full cursor-pointer md:order-2 md:ml-auto"
+        style={{ maxWidth: "calc((100vh - 15rem) * 16 / 9)" }}
       >
         <BrowserFrame url={url} live>
           <div className="transition-transform duration-[1.2s] ease-[cubic-bezier(.22,1,.36,1)] group-hover:scale-[1.015]">
@@ -64,8 +75,8 @@ function WorkCard({ num, tag, title, lead, url, preview, hoverLabel, onOpen, chi
               <div className="pointer-events-none h-full w-full">{preview}</div>
             </ScaledStage>
           </div>
-          <div className="pointer-events-none absolute inset-0 flex items-end justify-end bg-gradient-to-t from-ink/55 via-transparent to-transparent p-6 opacity-0 transition-opacity duration-500 group-hover:opacity-100 md:p-8">
-            <span className="flex items-center gap-3 rounded-full bg-mist px-6 py-3 text-[0.7rem] font-medium uppercase tracking-[0.25em] text-ink">
+          <div className="pointer-events-none absolute inset-0 flex items-end justify-end bg-gradient-to-t from-ink/55 via-transparent to-transparent p-5 opacity-0 transition-opacity duration-500 group-hover:opacity-100">
+            <span className="flex items-center gap-3 rounded-full bg-mist px-5 py-2.5 text-[0.65rem] font-medium uppercase tracking-[0.25em] text-ink">
               {hoverLabel}
               <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M7 17L17 7M8 7h9v9" />
@@ -73,20 +84,6 @@ function WorkCard({ num, tag, title, lead, url, preview, hoverLabel, onOpen, chi
             </span>
           </div>
         </BrowserFrame>
-      </div>
-
-      <div className="mt-8 grid gap-6 md:grid-cols-12 md:gap-10">
-        <div className="md:col-span-5">
-          <div className="flex items-center gap-4">
-            <span className="display text-sm text-fog">{num}</span>
-            <span className="eyebrow !tracking-[0.3em]">{tag}</span>
-          </div>
-          <h3 className="display mt-4 text-3xl font-medium md:text-[2.1rem]">{title}</h3>
-        </div>
-        <div className="md:col-span-7">
-          <p className="!max-w-none text-[0.95rem] leading-[1.75] text-mist/75">{lead}</p>
-          {children}
-        </div>
       </div>
     </article>
   );
@@ -217,15 +214,12 @@ function WorksCarousel({ onOpen }: { onOpen: (id: WorkId) => void }) {
   const touchX = useRef<number | null>(null);
 
   return (
-    <div>
-      <div className="mb-10 flex items-center justify-between gap-6">
-        <span className="display text-sm text-fog">
-          <span className="text-mist">{String(index + 1).padStart(2, "0")}</span> / {String(n).padStart(2, "0")}
-        </span>
-        <div className="flex gap-3">
-          <ArrowButton dir="prev" onClick={() => go(-1)} />
-          <ArrowButton dir="next" onClick={() => go(1)} />
-        </div>
+    <div className="relative md:px-20">
+      <div className="absolute inset-y-0 left-0 z-10 hidden items-center md:flex">
+        <ArrowButton dir="prev" onClick={() => go(-1)} />
+      </div>
+      <div className="absolute inset-y-0 right-0 z-10 hidden items-center md:flex">
+        <ArrowButton dir="next" onClick={() => go(1)} />
       </div>
 
       <div
@@ -258,13 +252,18 @@ function WorksCarousel({ onOpen }: { onOpen: (id: WorkId) => void }) {
             >
               <WorkCard
                 {...w}
-                num={String(i + 1).padStart(2, "0")}
+                num={`${String(i + 1).padStart(2, "0")} / ${String(n).padStart(2, "0")}`}
                 hoverLabel="Смотреть"
                 onOpen={() => onOpen(w.id)}
               />
             </motion.div>
           );
         })}
+      </div>
+
+      <div className="mt-8 flex justify-center gap-3 md:hidden">
+        <ArrowButton dir="prev" onClick={() => go(-1)} />
+        <ArrowButton dir="next" onClick={() => go(1)} />
       </div>
     </div>
   );
@@ -292,7 +291,7 @@ export function Works() {
           </FadeUp>
         </div>
 
-        <FadeUp className="mt-24">
+        <FadeUp className="mt-16">
           <WorksCarousel onOpen={setOpen} />
         </FadeUp>
       </div>
