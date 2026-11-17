@@ -1,5 +1,5 @@
 import { SplitReveal, FadeUp } from "../lib/Reveal";
-import { TELEGRAM_URL } from "../lib/contacts";
+import { CONTACT_HREF } from "../lib/contacts";
 import { Magnetic } from "../lib/Magnetic";
 
 // Ориентиры, не прайс: итоговая цена всегда после обсуждения.
@@ -85,9 +85,7 @@ export function Pricing() {
               </ol>
               <Magnetic strength={0.25} className="mt-8">
                 <a
-                  href={TELEGRAM_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href={CONTACT_HREF}
                   data-cursor
                   className="block rounded-full border border-accent/60 py-3.5 text-center text-[0.68rem] font-medium uppercase tracking-[0.28em] text-mist transition-colors duration-300 hover:bg-accent/10"
                 >

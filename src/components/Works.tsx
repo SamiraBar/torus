@@ -145,8 +145,133 @@ function Viewer({ open, onClose, url, children }: { open: boolean; onClose: () =
   );
 }
 
+type WorkId = "hotel" | "crm" | "school" | "bot" | "market";
+
+type WorkItem = Omit<WorkProps, "num" | "onOpen" | "hoverLabel"> & { id: WorkId };
+
+const WORKS: WorkItem[] = [
+  {
+    id: "market",
+    tag: "E-commerce · Маркетплейсы",
+    title: "Torus Marketplace",
+    lead: "Собственный маркетплейс вместо чужих площадок: каталог с поиском и фильтрами, хиты и новинки, избранное, корзина и онлайн-оплата, личный кабинет и чат с покупателем. На телефоне работает как приложение, с нижним меню и тёмной темой. Товары, цены и остатки подтягиваются из учётной системы автоматически.",
+    url: "market.torus.dev",
+    preview: <MarketShowcase />,
+  },
+  {
+    id: "hotel",
+    tag: "PMS · Гостиничный бизнес",
+    title: "Система управления отелем",
+    lead: "Шахматка номеров на месяц, заселение и выселение, база гостей с документами, питание, уборка и прачечная, персонал с авансами, доходы и расходы по дереву категорий, отчёты в PDF и Excel. Ресепшн и бухгалтерия работают в одной системе вместо тетрадей и таблиц.",
+    url: "hotel.torus.dev",
+    preview: <HotelPreview />,
+  },
+  {
+    id: "crm",
+    tag: "CRM · Продажи и сервис",
+    title: "CRM для бизнеса",
+    lead: "Заявки с сайта, Instagram и WhatsApp сразу попадают в воронку. Менеджер видит сделки, задачи и историю клиента, руководитель видит выручку и конверсию в реальном времени, а рутину вроде напоминаний, счетов и ответов ночью берут на себя автоматизации.",
+    url: "crm.torus.dev",
+    preview: <CrmApp preview />,
+  },
+  {
+    id: "school",
+    tag: "CRM · Образование",
+    title: "CRM для школы английского",
+    lead: "Два кабинета в одной системе. Администратор: онлайн- и офлайн-уроки в одном расписании, группы по уровням от A1 до IELTS, посещаемость в один клик и автосписание уроков из абонемента. Онлайн-класс с доской, чатом и записью урока, прогресс каждого ученика и отчёт родителям. Ученик: свои уроки, темы и материалы, документы, баллы и рейтинг в группе, вход в онлайн-класс в один клик.",
+    url: "school.torus.dev",
+    preview: <SchoolApp preview />,
+  },
+  {
+    id: "bot",
+    tag: "Чат-боты · AI-ассистент",
+    title: "Бот для записи и напоминаний",
+    lead: "Клиент пишет как обычно, бот понимает запрос, предлагает свободное время из CRM и сам записывает. Накануне напоминает о визите, после визита просит отзыв. Работает в WhatsApp, Telegram и Instagram круглосуточно, а администратор подключается только когда действительно нужен.",
+    url: "bot.torus.dev",
+    preview: <ChatShowcase />,
+  },
+];
+
+function ArrowButton({ dir, onClick }: { dir: "prev" | "next"; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      data-cursor
+      aria-label={dir === "prev" ? "Предыдущая работа" : "Следующая работа"}
+      className="flex h-14 w-14 items-center justify-center rounded-full border border-mist/15 text-mist transition-colors duration-300 hover:border-mist hover:bg-mist hover:text-ink"
+    >
+      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.6">
+        {dir === "prev" ? <path d="M19 12H5M11 6l-6 6 6 6" /> : <path d="M5 12h14M13 6l6 6-6 6" />}
+      </svg>
+    </button>
+  );
+}
+
+/** Looping carousel: all slides stay mounted (live previews keep their state),
+ *  each one is placed by its wrapped offset from the active index. */
+function WorksCarousel({ onOpen }: { onOpen: (id: WorkId) => void }) {
+  const n = WORKS.length;
+  const [index, setIndex] = useState(0);
+  const go = (d: number) => setIndex((i) => (i + d + n) % n);
+  const touchX = useRef<number | null>(null);
+
+  return (
+    <div>
+      <div className="mb-10 flex items-center justify-between gap-6">
+        <span className="display text-sm text-fog">
+          <span className="text-mist">{String(index + 1).padStart(2, "0")}</span> / {String(n).padStart(2, "0")}
+        </span>
+        <div className="flex gap-3">
+          <ArrowButton dir="prev" onClick={() => go(-1)} />
+          <ArrowButton dir="next" onClick={() => go(1)} />
+        </div>
+      </div>
+
+      <div
+        className="grid overflow-hidden"
+        onTouchStart={(e) => (touchX.current = e.touches[0].clientX)}
+        onTouchEnd={(e) => {
+          if (touchX.current === null) return;
+          const dx = e.changedTouches[0].clientX - touchX.current;
+          touchX.current = null;
+          if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+        }}
+      >
+        {WORKS.map((w, i) => {
+          // wrapped distance from the active slide: -2..2 for 5 slides
+          let off = (i - index + n) % n;
+          if (off > n / 2) off -= n;
+          const active = off === 0;
+          return (
+            <motion.div
+              key={w.id}
+              style={{ gridArea: "1 / 1" }}
+              initial={false}
+              animate={{ x: `${off * 100}%`, opacity: active ? 1 : 0 }}
+              transition={{ x: { duration: Math.abs(off) > 1 ? 0 : 0.8, ease }, opacity: { duration: 0.5 } }}
+              className={active ? "" : "pointer-events-none"}
+              aria-hidden={!active}
+              ref={(el) => {
+                if (el) active ? el.removeAttribute("inert") : el.setAttribute("inert", "");
+              }}
+            >
+              <WorkCard
+                {...w}
+                num={String(i + 1).padStart(2, "0")}
+                hoverLabel="Смотреть"
+                onOpen={() => onOpen(w.id)}
+              />
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function Works() {
-  const [open, setOpen] = useState<"hotel" | "crm" | "school" | "bot" | "market" | null>(null);
+  const [open, setOpen] = useState<WorkId | null>(null);
   const close = () => setOpen(null);
 
   return (
@@ -167,72 +292,9 @@ export function Works() {
           </FadeUp>
         </div>
 
-        <div className="mt-24 space-y-36">
-          <FadeUp>
-            <WorkCard
-              num="01"
-              tag="PMS · Гостиничный бизнес"
-              title="Система управления отелем"
-              lead="Шахматка номеров на месяц, заселение и выселение, база гостей с документами, питание, уборка и прачечная, персонал с авансами, доходы и расходы по дереву категорий, отчёты в PDF и Excel. Ресепшн и бухгалтерия работают в одной системе вместо тетрадей и таблиц."
-              url="hotel.torus.dev"
-              hoverLabel="Смотреть"
-              preview={<HotelPreview />}
-              onOpen={() => setOpen("hotel")}
-            />
-          </FadeUp>
-
-          <FadeUp>
-            <WorkCard
-              num="02"
-              tag="CRM · Продажи и сервис"
-              title="CRM для бизнеса"
-              lead="Заявки с сайта, Instagram и WhatsApp сразу попадают в воронку. Менеджер видит сделки, задачи и историю клиента, руководитель видит выручку и конверсию в реальном времени, а рутину вроде напоминаний, счетов и ответов ночью берут на себя автоматизации."
-              url="crm.torus.dev"
-              hoverLabel="Смотреть"
-              preview={<CrmApp preview />}
-              onOpen={() => setOpen("crm")}
-            />
-          </FadeUp>
-
-          <FadeUp>
-            <WorkCard
-              num="03"
-              tag="CRM · Образование"
-              title="CRM для школы английского"
-              lead="Два кабинета в одной системе. Администратор: онлайн- и офлайн-уроки в одном расписании, группы по уровням от A1 до IELTS, посещаемость в один клик и автосписание уроков из абонемента. Онлайн-класс с доской, чатом и записью урока, прогресс каждого ученика и отчёт родителям. Ученик: свои уроки, темы и материалы, документы, баллы и рейтинг в группе, вход в онлайн-класс в один клик."
-              url="school.torus.dev"
-              hoverLabel="Смотреть"
-              preview={<SchoolApp preview />}
-              onOpen={() => setOpen("school")}
-            />
-          </FadeUp>
-
-          <FadeUp>
-            <WorkCard
-              num="04"
-              tag="Чат-боты · AI-ассистент"
-              title="Бот для записи и напоминаний"
-              lead="Клиент пишет как обычно, бот понимает запрос, предлагает свободное время из CRM и сам записывает. Накануне напоминает о визите, после визита просит отзыв. Работает в WhatsApp, Telegram и Instagram круглосуточно, а администратор подключается только когда действительно нужен."
-              url="bot.torus.dev"
-              hoverLabel="Смотреть"
-              preview={<ChatShowcase />}
-              onOpen={() => setOpen("bot")}
-            />
-          </FadeUp>
-
-          <FadeUp>
-            <WorkCard
-              num="05"
-              tag="E-commerce · Маркетплейсы"
-              title="Torus Marketplace"
-              lead="Собственный маркетплейс вместо чужих площадок: каталог с поиском и фильтрами, хиты и новинки, избранное, корзина и онлайн-оплата, личный кабинет и чат с покупателем. На телефоне работает как приложение, с нижним меню и тёмной темой. Товары, цены и остатки подтягиваются из учётной системы автоматически."
-              url="market.torus.dev"
-              hoverLabel="Смотреть"
-              preview={<MarketShowcase />}
-              onOpen={() => setOpen("market")}
-            />
-          </FadeUp>
-        </div>
+        <FadeUp className="mt-24">
+          <WorksCarousel onOpen={setOpen} />
+        </FadeUp>
       </div>
 
       <Viewer open={open === "hotel"} onClose={close} url="hotel.torus.dev">

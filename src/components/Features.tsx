@@ -56,7 +56,7 @@ function Card({ n, title, body, delay }: (typeof features)[0] & { delay: number 
     const r = el.getBoundingClientRect();
     const x = e.clientX - r.left;
     const y = e.clientY - r.top;
-    gsap.to(sheen.current, { x: x - 140, y: y - 140, duration: 0.5, ease: "power2.out", opacity: 1 });
+    gsap.to(sheen.current, { x: x - 110, y: y - 110, duration: 0.5, ease: "power2.out", opacity: 1 });
     gsap.to(el, {
       rotateY: ((x / r.width) - 0.5) * 5,
       rotateX: ((y / r.height) - 0.5) * -5,
@@ -71,23 +71,23 @@ function Card({ n, title, body, delay }: (typeof features)[0] & { delay: number 
   };
 
   return (
-    <FadeUp delay={delay} className="[perspective:900px]">
+    <FadeUp delay={delay} className="h-full [perspective:900px]">
       <div
         ref={ref}
         data-cursor
         onMouseMove={onMove}
         onMouseLeave={onLeave}
-        className="glass group relative overflow-hidden p-8 transition-colors duration-500 will-change-transform md:p-10"
+        className="glass group relative flex h-full flex-col overflow-hidden p-6 transition-colors duration-500 will-change-transform md:p-7"
       >
         <div
           ref={sheen}
-          className="pointer-events-none absolute h-[280px] w-[280px] rounded-full opacity-0"
+          className="pointer-events-none absolute h-[220px] w-[220px] rounded-full opacity-0"
           style={{ background: "radial-gradient(circle, rgba(242,241,238,0.09) 0%, transparent 65%)" }}
         />
         <span className="text-[0.65rem] tracking-[0.3em] text-fog">{n}</span>
-        <h3 className="display mt-16 text-2xl font-medium md:text-3xl">{title}</h3>
-        <p className="caption mt-4">{body}</p>
-        <span className="mt-8 block h-px w-8 bg-accent/70 transition-all duration-700 group-hover:w-full" />
+        <h3 className="display mt-8 text-xl font-medium md:text-[1.35rem] md:leading-snug">{title}</h3>
+        <p className="caption mt-3 flex-1 !text-[0.85rem] !leading-relaxed">{body}</p>
+        <span className="mt-6 block h-px w-8 bg-accent/70 transition-all duration-700 group-hover:w-full" />
       </div>
     </FadeUp>
   );
@@ -96,15 +96,15 @@ function Card({ n, title, body, delay }: (typeof features)[0] & { delay: number 
 export function Features() {
   return (
     <section id="features" className="relative px-6 py-40 md:px-12">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-[1320px]">
         <p className="eyebrow mb-6">Услуги</p>
         <SplitReveal as="h2" by="chars" className="display display-lg max-w-[16ch]">
           Всё, что нужно бизнесу онлайн.
         </SplitReveal>
 
-        <div className="mt-24 grid gap-6 md:grid-cols-2">
+        <div className="mt-20 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((f, i) => (
-            <Card key={f.n} {...f} delay={i * 0.1} />
+            <Card key={f.n} {...f} delay={(i % 4) * 0.08} />
           ))}
         </div>
 

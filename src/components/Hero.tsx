@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef } from "react";
-import { TELEGRAM_URL } from "../lib/contacts";
+import { CONTACT_HREF } from "../lib/contacts";
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { motion } from "framer-motion";
@@ -69,9 +69,7 @@ export function Hero() {
       <div data-hero-fade className="mt-14 flex items-center gap-5 opacity-0">
         <Magnetic strength={0.4}>
           <a
-            href={TELEGRAM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={CONTACT_HREF}
             data-cursor
             className="glass inline-block rounded-full px-9 py-4 text-[0.72rem] font-medium uppercase tracking-[0.28em] transition-colors duration-300 hover:text-accent"
           >

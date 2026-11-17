@@ -1,14 +1,10 @@
 import { useState } from "react";
 import { SplitReveal } from "../lib/Reveal";
-import { Magnetic } from "../lib/Magnetic";
-import { TELEGRAM_URL, TELEGRAM_USERNAME } from "../lib/contacts";
 import { track } from "../lib/track";
-
-const TELEGRAM = TELEGRAM_URL;
 
 type Status = "idle" | "sending" | "sent" | "error";
 
-/** Заявка уходит на /api/lead (Vercel Function), а оттуда — в Telegram. */
+/** Заявка уходит на /api/lead (Vercel Function), а оттуда — в бот студии. */
 function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
 
@@ -51,14 +47,10 @@ function ContactForm() {
       >
         {status === "sending" ? "Отправляем…" : status === "sent" ? "Заявка отправлена" : "Отправить заявку"}
       </button>
-      {status === "sent" && <p className="text-[0.85rem] text-accent">Спасибо! Ответим в Telegram или по телефону в течение дня.</p>}
+      {status === "sent" && <p className="text-[0.85rem] text-accent">Спасибо! Свяжемся с вами в течение дня.</p>}
       {status === "error" && (
         <p className="text-[0.85rem] text-mist/80">
-          Не получилось отправить.{" "}
-          <a href={TELEGRAM} target="_blank" rel="noopener noreferrer" className="link-line text-accent">
-            Напишите нам в Telegram
-          </a>
-          .
+          Не получилось отправить. Попробуйте ещё раз через минуту.
         </p>
       )}
       <p className="caption !text-[0.7rem]">Нажимая кнопку, вы соглашаетесь на обработку данных.</p>
@@ -87,20 +79,9 @@ export function Footer() {
               Расскажите о задаче — предложим решение и оценим стоимость.
               Консультация бесплатная и ни к чему не обязывает.
             </p>
-            <Magnetic strength={0.3} className="self-start">
-              <a
-                href={TELEGRAM}
-                target="_blank"
-                rel="noopener noreferrer"
-                data-cursor
-                className="glass inline-block rounded-full px-10 py-4 text-[0.72rem] font-medium uppercase tracking-[0.28em] transition-colors duration-300 hover:text-accent"
-              >
-                Написать в Telegram
-              </a>
-            </Magnetic>
-            <a href={TELEGRAM} target="_blank" rel="noopener noreferrer" className="link-line self-start text-sm text-mist">
-              @{TELEGRAM_USERNAME}
-            </a>
+            <p className="max-w-md text-[0.98rem] leading-[1.7] text-mist/60">
+              Оставьте имя и удобный способ связи в форме — ответим в течение дня.
+            </p>
           </div>
 
           {/* форма заявки */}
@@ -119,7 +100,6 @@ export function Footer() {
               ["Работы", "#works"],
               ["Цены", "#pricing"],
               ["Контакты", "#contacts"],
-              ["Telegram", TELEGRAM],
             ].map(([label, href]) => (
               <a
                 key={label}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TELEGRAM_URL } from "../lib/contacts";
+import { CONTACT_HREF } from "../lib/contacts";
 import { motion, AnimatePresence } from "framer-motion";
 import { SplitReveal, FadeUp } from "../lib/Reveal";
 
@@ -57,7 +57,7 @@ export function FAQ() {
               <p className="mt-6 max-w-[30ch] text-[0.95rem] leading-[1.7] text-mist/70">
                 Не нашли ответ? Напишите нам — ответим в течение дня.
               </p>
-              <a href={TELEGRAM_URL} target="_blank" rel="noopener noreferrer" data-cursor className="link-line mt-6 inline-block text-[0.7rem] uppercase tracking-[0.3em] text-accent">
+              <a href={CONTACT_HREF} data-cursor className="link-line mt-6 inline-block text-[0.7rem] uppercase tracking-[0.3em] text-accent">
                 Задать вопрос
               </a>
             </FadeUp>

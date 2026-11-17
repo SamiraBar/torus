@@ -7,3 +7,6 @@ dist
 .DS_Store
 *.tsbuildinfo
 .claude
+
+# личные заметки по стартапу (не публиковать)
+startup

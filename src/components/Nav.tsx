@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TELEGRAM_URL } from "../lib/contacts";
+import { CONTACT_HREF } from "../lib/contacts";
 import { motion } from "framer-motion";
 import { Magnetic } from "../lib/Magnetic";
 
@@ -49,9 +49,7 @@ export function Nav() {
 
         <Magnetic strength={0.3}>
           <a
-            href={TELEGRAM_URL}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={CONTACT_HREF}
             className="glass block rounded-full px-6 py-2.5 text-[0.7rem] font-medium uppercase tracking-[0.25em] transition-colors duration-300 hover:text-accent"
           >
             Обсудить проект
