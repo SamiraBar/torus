@@ -22,6 +22,18 @@
       ],
       "port": 3000,
       "autoPort": true
+    },
+    {
+      "name": "buh-demo",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/Users/samirabaratova/Desktop/buh-demo",
+        "run",
+        "dev"
+      ],
+      "port": 5180,
+      "autoPort": true
     }
   ]
 }

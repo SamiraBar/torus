@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+/*
+  Reel 1080×1920, 30 s. Every animation is a CSS animation with an absolute
+  delay on one global timeline; the renderer pauses them and seeks to each
+  frame, so the output is deterministic and perfectly smooth.
+
+  Timeline (seconds):  S1 0–3.5 · S2 3.5–7.5 · S3 7.5–13.5 · S4 13.5–18.5 · S5 18.5–23.5 · S6 23.5–30
+*/
+:root { --ink:#08090b; --mist:#f2f1ee; --fog:#9a9a94; --accent:#8fa8ff; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:1080px; height:1920px; overflow:hidden; background:var(--ink); font-family:Inter, sans-serif; color:var(--mist); }
+.bg { position:absolute; inset:0; background:
+  radial-gradient(900px 900px at 15% 10%, rgba(70,90,200,.35), transparent 65%),
+  radial-gradient(800px 800px at 90% 95%, rgba(143,168,255,.22), transparent 65%), var(--ink); }
+.lines { position:absolute; inset:0; display:grid; grid-template-columns:repeat(6,1fr); }
+.lines i { border-left:1px solid rgba(242,241,238,.045); } .lines i:first-child { border:0; }
+
+.scene { position:absolute; inset:0; opacity:0; animation-name:vis; animation-timing-function:linear; animation-fill-mode:both; }
+@keyframes vis { 0% { opacity:0; } 6% { opacity:1; } 94% { opacity:1; } 100% { opacity:0; } }
+
+.anim { animation-fill-mode:both; animation-timing-function:cubic-bezier(.22,1,.36,1); }
+@keyframes up { from { opacity:0; transform:translateY(60px); } to { opacity:1; transform:none; } }
+@keyframes pop { 0% { opacity:0; transform:translateY(30px) scale(.9); } 60% { opacity:1; transform:translateY(-4px) scale(1.02); } 100% { opacity:1; transform:none; } }
+@keyframes fadeGrey { to { opacity:.35; filter:grayscale(1); } }
+@keyframes zoomIn { from { transform:scale(1.0); } to { transform:scale(1.12); } }
+@keyframes panLeft { from { transform:scale(1.25) translateX(6%); } to { transform:scale(1.25) translateX(-6%); } }
+@keyframes panUp { from { transform:scale(1.18) translateY(4%); } to { transform:scale(1.18) translateY(-4%); } }
+@keyframes spin { from { transform:rotate(0); } to { transform:rotate(360deg); } }
+@keyframes ringIn { 0% { opacity:0; transform:scale(.6) rotate(-30deg); } 100% { opacity:1; transform:none; } }
+@keyframes breathe { 0%,100% { transform:scale(1); } 50% { transform:scale(1.04); } }
+@keyframes out { to { opacity:0; transform:translateY(-30px); } }
+@keyframes slideIn { from { opacity:0; transform:translateX(120px); } to { opacity:1; transform:none; } }
+
+.caption { position:absolute; left:80px; right:150px; top:1260px; font-family:Manrope; font-weight:800; font-size:76px; line-height:1.06; letter-spacing:-.03em; }
+.caption .acc { color:var(--accent); }
+.kicker { position:absolute; left:80px; top:200px; font-size:26px; letter-spacing:.35em; text-transform:uppercase; color:var(--accent); }
+.brand { position:absolute; left:80px; top:130px; font-family:Manrope; font-weight:700; letter-spacing:.3em; font-size:28px; display:flex; align-items:center; gap:16px; }
+.brand .r { width:34px; height:34px; border-radius:50%; border:4px solid var(--mist); position:relative; }
+.brand .r::after { content:""; position:absolute; inset:8px; border-radius:50%; background:var(--mist); }
+
+/* phone (S1/S2) */
+.phone { position:absolute; left:50%; top:330px; width:600px; height:880px; margin-left:-300px; border-radius:70px; padding:14px; background:linear-gradient(160deg,#2a2c33,#0b0c0f); box-shadow:0 0 0 2px rgba(255,255,255,.08), 0 80px 160px -50px rgba(0,0,0,.9), 0 0 160px -40px rgba(143,168,255,.45); }
+.screen { width:100%; height:100%; border-radius:58px; overflow:hidden; background:#efeae2; position:relative; color:#111b21; }
+.status { height:64px; display:flex; justify-content:space-between; align-items:center; padding:0 40px; font-weight:600; font-size:24px; background:#f7f5f2; }
+.island { position:absolute; left:50%; top:16px; width:150px; height:38px; margin-left:-75px; border-radius:30px; background:#000; }
+.chathead { display:flex; align-items:center; gap:18px; padding:14px 28px 20px; background:#f7f5f2; border-bottom:1px solid #e4e0da; }
+.av { width:58px; height:58px; border-radius:50%; background:#15161a; }
+.chathead b { font-size:26px; display:block; } .chathead span { font-size:20px; color:#667781; }
+.msgs { padding:26px 22px; display:flex; flex-direction:column; gap:16px; }
+.bubble { align-self:flex-start; max-width:430px; background:#fff; border-radius:24px; border-top-left-radius:6px; padding:16px 20px 10px; font-size:26px; line-height:1.35; box-shadow:0 1px 1px rgba(0,0,0,.06); }
+.bubble small { display:block; text-align:right; font-size:17px; color:#667781; margin-top:4px; }
+.clock { position:absolute; right:24px; top:20px; font-size:24px; font-weight:700; }
+.unread { position:absolute; left:50%; top:1100px; transform:translateX(-50%); }
+
+/* screenshots */
+.frame { position:absolute; left:60px; right:60px; top:340px; height:820px; border-radius:36px; overflow:hidden; border:2px solid rgba(242,241,238,.12); box-shadow:0 80px 160px -50px rgba(0,0,0,.9), 0 0 160px -40px rgba(143,168,255,.3); background:#111; }
+.frame img { width:100%; height:100%; object-fit:cover; object-position:center; display:block; }
+.tag { position:absolute; left:60px; top:1190px; padding:14px 28px; border-radius:999px; border:2px solid rgba(143,168,255,.6); font-size:26px; letter-spacing:.18em; text-transform:uppercase; }
+
+.ring3d { position:absolute; left:50%; top:330px; width:820px; height:820px; margin-left:-410px; border-radius:50%; overflow:hidden; }
+.ring3d img { width:100%; height:100%; }
+</style>
+</head>
+<body>
+<div class="bg"></div><div class="lines"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+<!-- S1 0–3.5: late night messages -->
+<div class="scene" style="animation-duration:3.5s;animation-delay:0s">
+  <div class="brand"><span class="r"></span>TORUS</div>
+  <div class="phone anim" style="animation:up .8s .1s both">
+    <div class="screen">
+      <div class="status"><span>23:40</span><span>▮▮▮</span></div><div class="island"></div>
+      <div class="chathead"><div class="av"></div><div><b>Клиенты</b><span>3 новых сообщения</span></div></div>
+      <div class="msgs" id="m1">
+        <div class="bubble anim" style="animation:pop .5s .7s both">Здравствуйте! Можно записаться на завтра?<small>23:38</small></div>
+        <div class="bubble anim" style="animation:pop .5s 1.4s both">Вы работаете в субботу?<small>23:39</small></div>
+        <div class="bubble anim" style="animation:pop .5s 2.1s both">Сколько стоит? Ответьте, пожалуйста<small>23:40</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="caption anim" style="animation:up .7s .3s both">Клиенты пишут вам<br/><span class="acc">в 23:40?</span></div>
+</div>
+
+<!-- S2 3.5–7.5: answered in the morning, clients gone -->
+<div class="scene" style="animation-duration:4s;animation-delay:3.5s">
+  <div class="brand"><span class="r"></span>TORUS</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="status"><span>09:15</span><span>▮▮▮</span></div><div class="island"></div>
+      <div class="chathead"><div class="av"></div><div><b>Клиенты</b><span>был(а) давно</span></div></div>
+      <div class="msgs anim" style="animation:fadeGrey 1.2s 5.2s both">
+        <div class="bubble">Здравствуйте! Можно записаться на завтра?<small>23:38</small></div>
+        <div class="bubble">Вы работаете в субботу?<small>23:39</small></div>
+        <div class="bubble">Сколько стоит? Ответьте, пожалуйста<small>23:40</small></div>
+        <div class="bubble anim" style="align-self:flex-end;background:#d9fdd3;border-radius:24px;border-top-right-radius:6px;animation:pop .5s 4.4s both">Доброе утро! Да, конечно<small>09:15</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="caption anim" style="animation:up .7s 3.8s both">А утром клиент уже<br/><span class="acc">у конкурентов</span></div>
+</div>
+
+<!-- S3 7.5–13.5: bot -->
+<div class="scene" style="animation-duration:6s;animation-delay:7.5s">
+  <div class="brand"><span class="r"></span>TORUS</div>
+  <div class="kicker anim" style="animation:up .6s 7.8s both">Чат-бот</div>
+  <div class="frame anim" style="animation:up .8s 7.7s both"><img class="anim" src="../shots/bot-phones.png" style="animation:zoomIn 6s 7.5s linear both;object-position:50% 40%" /></div>
+  <div class="caption anim" style="animation:up .7s 8.1s both">Бот сам отвечает,<br/>записывает и напоминает.<br/><span class="acc">Даже ночью.</span></div>
+</div>
+
+<!-- S4 13.5–18.5: CRM -->
+<div class="scene" style="animation-duration:5s;animation-delay:13.5s">
+  <div class="brand"><span class="r"></span>TORUS</div>
+  <div class="kicker anim" style="animation:up .6s 13.8s both">CRM</div>
+  <div class="frame anim" style="animation:up .8s 13.7s both"><img class="anim" src="../shots/crm.png" style="animation:panUp 5s 13.5s linear both;object-position:left top" /></div>
+  <div class="caption anim" style="animation:up .7s 14.1s both">Заявки, клиенты и оплаты —<br/><span class="acc">в одной системе</span></div>
+</div>
+
+<!-- S5 18.5–23.5: niches quick cuts -->
+<div class="scene" style="animation-duration:5s;animation-delay:18.5s">
+  <div class="brand"><span class="r"></span>TORUS</div>
+  <div class="scene" style="animation-duration:1.75s;animation-delay:18.5s">
+    <div class="frame"><img class="anim" src="../shots/school-student.png" style="animation:zoomIn 1.75s 18.5s linear both" /></div>
+    <div class="tag anim" style="animation:slideIn .5s 18.7s both">Школы и курсы</div>
+  </div>
+  <div class="scene" style="animation-duration:1.75s;animation-delay:20.1s">
+    <div class="frame"><img class="anim" src="../shots/hotel.png" style="animation:zoomIn 1.75s 20.1s linear both;object-position:left top" /></div>
+    <div class="tag anim" style="animation:slideIn .5s 20.3s both">Гостиницы</div>
+  </div>
+  <div class="scene" style="animation-duration:1.8s;animation-delay:21.7s">
+    <div class="frame"><img class="anim" src="../shots/market.png" style="animation:zoomIn 1.8s 21.7s linear both" /></div>
+    <div class="tag anim" style="animation:slideIn .5s 21.9s both">Салоны и магазины</div>
+  </div>
+  <div class="caption anim" style="animation:up .7s 18.7s both, out .35s 22.2s forwards">Для школ, гостиниц,<br/><span class="acc">салонов и магазинов</span></div>
+  <div class="caption anim" style="animation:up .7s 22.45s both">Под вашу задачу,<br/><span class="acc">а не по шаблону</span></div>
+</div>
+
+<!-- S6 23.5–30: outro -->
+<div class="scene" style="animation-duration:6.5s;animation-delay:23.5s;">
+  <div class="ring3d anim" style="animation:ringIn 1.2s 23.6s both"><img class="anim" src="../posts/avatar.png" style="animation:breathe 4s 24.8s ease-in-out both" /></div>
+  <div class="caption anim" style="top:1220px;text-align:center;left:80px;right:80px;animation:up .8s 23.7s both">Студия Torus</div>
+  <div class="anim" style="position:absolute;left:80px;right:80px;top:1330px;text-align:center;font-family:Manrope;font-weight:800;font-size:64px;letter-spacing:-.02em;color:var(--accent);animation:up .8s 24.8s both">Разберём вашу задачу</div>
+  <div class="anim" style="position:absolute;left:0;right:0;top:1460px;text-align:center;animation:up .8s 27.2s both">
+    <span style="display:inline-block;padding:20px 40px;border-radius:999px;border:2px solid rgba(143,168,255,.6);font-size:28px;letter-spacing:.2em;text-transform:uppercase;">Ссылка в шапке профиля</span>
+  </div>
+</div>
+
+</body>
+</html>
